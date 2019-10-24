@@ -20,13 +20,13 @@ Mat RenderFrame(void)
 	CScene scene;
 	
 	// Load scene description
-	scene.ParseOBJ("../../../data/cow.obj");
+	scene.ParseOBJ("data/cow.obj");
 
-#ifdef ENABLE_BSP
-	// Build BSPTree
-	scene.BuildAccelStructure();
-#endif
-	
+// #ifdef ENABLE_BSP
+// 	// Build BSPTree
+// 	scene.BuildAccelStructure();
+// #endif
+
 	Vec3f pointLightIntensity(3, 3, 3);
 	Vec3f lightPosition2(-3, 5, 4);
 	Vec3f lightPosition3(0, 1, 4);
@@ -49,7 +49,7 @@ Mat RenderFrame(void)
 
 int main(int argc, char* argv[])
 {
-	DirectGraphicalModels::Timer::start("Rebdering frame... ");
+	DirectGraphicalModels::Timer::start("Rendering frame... ");
 	Mat img = RenderFrame();
 	DirectGraphicalModels::Timer::stop();
 	imshow("Image", img);
