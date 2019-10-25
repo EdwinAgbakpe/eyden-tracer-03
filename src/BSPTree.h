@@ -40,7 +40,37 @@ public:
 		int splitDim;
 		std::shared_ptr<CBSPNode> pLeft;
 		std::shared_ptr<CBSPNode> pRight;
+		std::vector<std::shared_ptr<CPrim>> l_prim;
+		std::vector<std::shared_ptr<CPrim>> r_prim;
+
 		// --- PUT YOUR CODE HERE ---
+		if (depth > m_maxDepth || vpPrims.size() < m_minTri) {
+			std::shared_ptr<CBSPNode> leafNode = std::make_shared<CBSPNode>(vpPrims);
+			return leafNode;
+		}
+		
+		Vec3f box_dim(box.m_max[0] - box.m_min[0], box.m_max[1] - box.m_min[1], box.m_max[2] - box.m_min[2]);
+		splitDim = MaxDim(box_dim);
+		splitVal = (box.m_max[splitDim] + box.m_min[splitDim]) / 2;
+		CBoundingBox l_box(box);
+		CBoundingBox r_box (box);
+
+		l_box.m_max[splitDim] = splitVal;
+		r_box.m_min[splitDim] = splitVal;
+
+
+
+		for (auto obj : vpPrims) {
+			if (obj->inVoxel(l_box)) {
+				l_prim.push_back(obj);
+			}
+			else {
+				r_prim.push_back(obj);
+			}
+		}
+		pLeft = BuildTree(l_box, l_prim, depth + 1);
+		pRight = BuildTree(r_box, r_prim, depth + 1);
+
 		return std::make_shared<CBSPNode>(splitVal, splitDim, pLeft, pRight);
 	}
 
@@ -52,7 +82,15 @@ public:
 	bool Intersect(Ray& ray)
 	{
 		// --- PUT YOUR CODE HERE ---
-		return false;
+		float a = 0;
+		float b = 0;
+
+		m_bounds.clip(ray, a, b);
+
+		if (a == 0 && b == 0)
+			return false;
+		else 
+			return m_root->traverse(ray, a, b);
 	}
 
 	

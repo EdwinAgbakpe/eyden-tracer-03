@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/Users/edwinagbakpe/eyden-tracer-03/src/BSPNode.h
+types.h
+/Users/edwinagbakpe/eyden-tracer-03/src/types.h
+
+/Users/edwinagbakpe/eyden-tracer-03/src/BSPTree.h
+BSPNode.h
+/Users/edwinagbakpe/eyden-tracer-03/src/BSPNode.h
+BoundingBox.h
+/Users/edwinagbakpe/eyden-tracer-03/src/BoundingBox.h
+
 /Users/edwinagbakpe/eyden-tracer-03/src/BoundingBox.h
 types.h
 /Users/edwinagbakpe/eyden-tracer-03/src/types.h
@@ -56,6 +66,18 @@ Prim.h
 Prim.h
 /Users/edwinagbakpe/eyden-tracer-03/src/Prim.h
 
+/Users/edwinagbakpe/eyden-tracer-03/src/Scene.cpp
+iostream
+-
+Scene.h
+/Users/edwinagbakpe/eyden-tracer-03/src/Scene.h
+ShaderEyelight.h
+/Users/edwinagbakpe/eyden-tracer-03/src/ShaderEyelight.h
+ShaderPhong.h
+/Users/edwinagbakpe/eyden-tracer-03/src/ShaderPhong.h
+PrimTriangle.h
+/Users/edwinagbakpe/eyden-tracer-03/src/PrimTriangle.h
+
 /Users/edwinagbakpe/eyden-tracer-03/src/Scene.h
 ILight.h
 /Users/edwinagbakpe/eyden-tracer-03/src/ILight.h
@@ -63,6 +85,8 @@ Prim.h
 /Users/edwinagbakpe/eyden-tracer-03/src/Prim.h
 CameraPerspective.h
 /Users/edwinagbakpe/eyden-tracer-03/src/CameraPerspective.h
+BSPTree.h
+/Users/edwinagbakpe/eyden-tracer-03/src/BSPTree.h
 
 /Users/edwinagbakpe/eyden-tracer-03/src/ShaderEyelight.h
 ShaderFlat.h
@@ -868,6 +892,16 @@ iostream
 map
 -
 
+/usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/random.h
+algorithm
+-
+cstdlib
+-
+vector
+-
+general.h
+/usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/general.h
+
 /usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/result_set.h
 algorithm
 -
@@ -897,6 +931,14 @@ general.h
 /usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/general.h
 nn_index.h
 /usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/nn_index.h
+
+/usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/timer.h
+time.h
+-
+opencv2/core.hpp
+/usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/opencv2/core.hpp
+opencv2/core/utility.hpp
+/usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/flann/opencv2/core/utility.hpp
 
 /usr/local/Cellar/opencv/4.1.1_2/include/opencv4/opencv2/highgui.hpp
 opencv2/core.hpp

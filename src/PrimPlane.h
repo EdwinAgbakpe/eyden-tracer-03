@@ -37,6 +37,10 @@ public:
 	{
 		CBoundingBox bounds;
 		// --- PUT YOUR CODE HERE ---
+		Vec3f p_inf(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
+		Vec3f n_inf(-std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity());
+		bounds.extend(p_inf);
+		bounds.extend(n_inf);
 		return bounds;
 	}
 	

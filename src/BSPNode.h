@@ -46,10 +46,40 @@ public:
 	{
 		if (isLeaf()) {
 			// --- PUT YOUR CODE HERE ---
-			return true;
+			bool hit = false;
+			//float oldT = ray.t;
+			for (auto obj : m_vpPrims) {
+				hit |= obj->Intersect(ray);
+			}
+			return hit;
 		} else {
 			// --- PUT YOUR CODE HERE ---
-			return true;
+			float dist = (m_splitVal - ray.org[m_splitDim]) / ray.dir[m_splitDim];
+			std::shared_ptr<CBSPNode> n, f;
+
+			if (dist > 0) {
+				n = m_pLeft;
+				f = m_pRight;
+			}
+			else {
+				n = m_pRight;
+				f = m_pLeft;
+			}
+
+			if (ray.dir[m_splitDim] < 0) {
+				std::swap(n, f);
+			}
+			if (dist > t1 || dist < 0) {
+				return n->traverse(ray, t0, t1);
+			}
+			else if (dist < t0) {
+				return f->traverse(ray, t0, t1);
+			}
+			else {
+				bool hit = n->traverse(ray, t0, dist);
+				if (hit) return hit;
+				return f->traverse(ray, dist, t1);
+			}
 		}
 	}
 

@@ -66,6 +66,10 @@ public:
 	{
 		CBoundingBox res;
 		// --- PUT YOUR CODE HERE ---
+		Vec3f min(m_center[0] - m_radius, m_center[1]- m_radius, m_center[2] - m_radius);
+		Vec3f max(m_center[0] + m_radius, m_center[1] + m_radius, m_center[2] + m_radius);
+		res.extend(min);
+		res.extend(max);
 		return res;
 	}
 	

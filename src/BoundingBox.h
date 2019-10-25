@@ -32,6 +32,10 @@ public:
 	void clear(void)
 	{
 		// --- PUT YOUR CODE HERE ---
+		for (int i = 0; i < 3; i++){
+			m_min[i] = std::numeric_limits<float>::infinity();
+			m_max[i] = std::numeric_limits<float>::infinity();
+		}
 	}
 	
 	/**
@@ -41,6 +45,8 @@ public:
 	void extend(Vec3f a)
 	{
 		// --- PUT YOUR CODE HERE ---
+		m_min = Min3f(m_min, a);
+		m_max = Max3f(m_max, a);
 	}
 	
 	/**
@@ -50,6 +56,8 @@ public:
 	void extend(const CBoundingBox& box)
 	{
 		// --- PUT YOUR CODE HERE ---
+		extend(box.m_min);
+		extend(box.m_max);
 	}
 	
 	/**
@@ -59,8 +67,12 @@ public:
 	bool overlaps(const CBoundingBox& box)
 	{
 		// --- PUT YOUR CODE HERE ---
-		return true;
+		return 
+		(m_min[0] <= box.m_max[0] && box.m_min[0] <= m_max[0]) &&
+		(m_min[1] <= box.m_max[1] && box.m_min[1] <= m_max[1]) &&
+		(m_min[2] <= box.m_max[2] && box.m_min[2] <= m_max[2]);
 	}
+	
 	
 	/**
 	 * @brief Clips the ray with the bounding box
@@ -71,6 +83,32 @@ public:
 	void clip(const Ray& ray, float& t0, float& t1)
 	{
 		// --- PUT YOUR CODE HERE ---
+		float nx = (m_min[0] - ray.org[0]) / ray.dir[0];
+		float ny = (m_min[1] - ray.org[1]) / ray.dir[1];
+		float nz = (m_min[2] - ray.org[2]) / ray.dir[2];
+
+		float fx = (m_max[0] - ray.org[0]) / ray.dir[0];
+		float fy = (m_max[1] - ray.org[1]) / ray.dir[1];
+		float fz = (m_max[2] - ray.org[2]) / ray.dir[2];
+
+		if (ray.dir[0] < 0){
+			std::swap(nx, fx);
+		}
+		if (ray.dir[1] < 0){
+			std::swap(ny, fy);
+		}
+		if (ray.dir[2] < 0){
+			std::swap(nz, fz);
+		}
+
+		float n_max = MAX(MAX(nx, ny), nz);
+		float f_min = MIN(MIN(fx, fy), fz);
+
+		if (n_max < f_min) {
+			t0 = n_max;
+			t1 = f_min;
+		}
+		return;
 	}
 	
 	
