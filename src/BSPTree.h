@@ -21,7 +21,7 @@ public:
 	BSPTree(CBoundingBox& bounds, const std::vector<std::shared_ptr<CPrim>>& vpPrims)
 		: m_bounds(bounds)
 		, m_maxDepth(0)
-		, m_minTri(3)
+		, m_minTri(15)
 		, m_root(nullptr)
 	{
 		m_root = BuildTree(bounds, vpPrims, 0);
@@ -94,19 +94,19 @@ public:
 		for (auto pPrim : vpPrims) {
 			if (pPrim->inVoxel(tnr))
 				tnrPrim.push_back(pPrim);
-			if (pPrim->inVoxel(tnl))
+			else if (pPrim->inVoxel(tnl))
 				tnlPrim.push_back(pPrim);
-			if (pPrim->inVoxel(tfl))
+			else if (pPrim->inVoxel(tfl))
 				tflPrim.push_back(pPrim);
-			if (pPrim->inVoxel(tfr))
+			else if (pPrim->inVoxel(tfr))
 				tfrPrim.push_back(pPrim);
-			if (pPrim->inVoxel(bnl))
+			else if (pPrim->inVoxel(bnl))
 				bnlPrim.push_back(pPrim);
-			if (pPrim->inVoxel(bfl))
+			else if (pPrim->inVoxel(bfl))
 				bflPrim.push_back(pPrim);
-			if (pPrim->inVoxel(bfr))
+			else if (pPrim->inVoxel(bfr))
 				bfrPrim.push_back(pPrim);
-			if (pPrim->inVoxel(bnr))
+			else if (pPrim->inVoxel(bnr))
 				bnrPrim.push_back(pPrim);
 		}
 
@@ -119,8 +119,8 @@ public:
 		auto pbfl = BuildTree(bfl, bflPrim, depth + 1);
 		auto pbfr = BuildTree(bfr, bfrPrim, depth + 1);
 		auto pbnr = BuildTree(bnr, bnrPrim, depth + 1);
-		std::cout<<vpPrims.size()<<" : ";
-		std::cout<<tnrPrim.size()+tnlPrim.size()+tflPrim.size()+tfrPrim.size()+bnlPrim.size()+bflPrim.size()+bfrPrim.size()+bnrPrim.size()<<std::endl;
+		// std::cout<<depth <<" "<<vpPrims.size()<<" : ";
+		// std::cout<<tnrPrim.size()+tnlPrim.size()+tflPrim.size()+tfrPrim.size()+bnlPrim.size()+bflPrim.size()+bfrPrim.size()+bnrPrim.size()<<std::endl;
 
 		return std::make_shared<CBSPNode>(box.m_side, bl, tr, ptnr, ptnl, ptfl, ptfr, pbnl, pbfl, pbfr, pbnr);
 	}

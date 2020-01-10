@@ -119,11 +119,11 @@ public:
 		}
 		
 		float tx0, tx1, ty0, ty1, tz0, tz1;
-		// tx0 = ray.org[0] + t0 * ray.dir[0];
+		// tx0 = ray.org[0] + t1 * ray.dir[0];
 		// tx1 = ray.org[0] + t1 * ray.dir[0];
-		// ty0 = ray.org[1] + t0 * ray.dir[1];
+		// ty0 = ray.org[1] + t1 * ray.dir[1];
 		// ty1 = ray.org[1] + t1 * ray.dir[1];
-		// tz0 = ray.org[2] + t0 * ray.dir[2];
+		// tz0 = ray.org[2] + t1 * ray.dir[2];
 		// tz1 = ray.org[2] + t1 * ray.dir[2];
 
 		tx0 = (m_min[0] - ray.org[0]) /ray.dir[0];
