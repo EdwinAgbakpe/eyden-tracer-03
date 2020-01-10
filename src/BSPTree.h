@@ -53,24 +53,6 @@ public:
 
 		int splitDim = MaxDim(diam);
 
-		// CBoundingBox lBounds = box;
-		// CBoundingBox rBounds = box;
-
-		float splitVal = /*lBounds.m_max[splitDim] = rBounds.m_min[splitDim] =*/ (bl[splitDim] + tr[splitDim]) * 0.5f;
-		// std::vector<std::shared_ptr<CPrim>> lPrim;
-		// std::vector<std::shared_ptr<CPrim>> rPrim;
-
-
-		// for (auto pPrim : vpPrims) {
-		// 	if (pPrim->inVoxel(lBounds))
-		// 		lPrim.push_back(pPrim);
-		// 	if (pPrim->inVoxel(rBounds))
-		// 		rPrim.push_back(pPrim);
-		// }
-
-		// auto pLeft = BuildTree(lBounds, lPrim, depth + 1);
-		// auto pRight = BuildTree(rBounds, rPrim, depth + 1);
-
 		CBoundingBox tnr, tnl, tfl, tfr, bnl, bfl, bfr, bnr;
 		tnr.org = box.org + Vec3f((box.m_side/4), (box.m_side/4), (box.m_side/4));
 		tnl.org = box.org + Vec3f(-(box.m_side/4), (box.m_side/4), (box.m_side/4));
@@ -119,8 +101,6 @@ public:
 		auto pbfl = BuildTree(bfl, bflPrim, depth + 1);
 		auto pbfr = BuildTree(bfr, bfrPrim, depth + 1);
 		auto pbnr = BuildTree(bnr, bnrPrim, depth + 1);
-		// std::cout<<depth <<" "<<vpPrims.size()<<" : ";
-		// std::cout<<tnrPrim.size()+tnlPrim.size()+tflPrim.size()+tfrPrim.size()+bnlPrim.size()+bflPrim.size()+bfrPrim.size()+bnrPrim.size()<<std::endl;
 
 		return std::make_shared<CBSPNode>(box.m_side, bl, tr, ptnr, ptnl, ptfl, ptfr, pbnl, pbfl, pbfr, pbnr);
 	}

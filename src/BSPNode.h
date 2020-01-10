@@ -15,19 +15,7 @@ public:
 
 	CBSPNode(const std::vector<std::shared_ptr<CPrim>>& vpPrims)
 		: CBSPNode(vpPrims, 0, Vec3f::all(std::numeric_limits<float>::infinity()), Vec3f::all(-std::numeric_limits<float>::infinity()), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr)
-	{
-		// m_vpPrims = vpPrims;
-		// m_splitVal = 0;
-		// m_splitDim = 0;
-		// m_tnr = nullptr;
-		// m_tnl = nullptr;
-		// m_tfl = nullptr;
-		// m_tfr = nullptr;
-		// m_bnl = nullptr;
-		// m_bfl = nullptr;
-		// m_bfr = nullptr;
-		// m_bnr = nullptr;
-	}
+	{}
 	/**
 	 * @brief Branch node constructor
 	 * @param splitVal The splitting value
@@ -35,12 +23,6 @@ public:
 	 * @param left Pointer to the left sub-tree
 	 * @param right Pointer to the right sub-tree
 	 */
-	// CBSPNode(float splitVal, int splitDim, std::shared_ptr<CBSPNode> left, std::shared_ptr<CBSPNode> right)
-	// 	: CBSPNode(std::nullopt, splitVal, splitDim, left, right)
-	// {}
-	// CBSPNode(const CBSPNode&) = delete;
-	// virtual ~CBSPNode(void) = default;
-	// const CBSPNode& operator=(const CBSPNode&) = delete;
 
 	CBSPNode(float size, Vec3f min, Vec3f max, std::shared_ptr<CBSPNode> tnr,std::shared_ptr<CBSPNode>tnl, std::shared_ptr<CBSPNode> tfl, 
 	std::shared_ptr<CBSPNode>tfr, std::shared_ptr<CBSPNode> bnl, std::shared_ptr<CBSPNode>bfl, 
@@ -70,36 +52,7 @@ public:
 	 * @param[in,out] t0 The distance from ray origin at which the ray enters the scene
 	 * @param[in,out] t1 The distance from ray origin at which the ray leaves the scene
 	 */
-	// virtual bool traverse(Ray& ray, float& t0, float& t1)
-	// {
-	// 	if (isLeaf()) {
-	// 		for (auto pPrim : m_vpPrims)
-	// 			pPrim->Intersect(ray);
-	// 		return (ray.hit != NULL && ray.t < t1);
-	// 	}
-	// 	else {
-	// 		float d = (m_splitVal - ray.org[m_splitDim]) / ray.dir[m_splitDim];
 
-	// 		auto frontNode = (ray.dir[m_splitDim] < 0) ? Right() : Left();
-	// 		auto backNode = (ray.dir[m_splitDim] < 0) ? Left() : Right();
-
-	// 		if (d <= t0) {
-	// 			// t0..t1 is totally behind d, only go to back side
-	// 			return backNode->traverse(ray, t0, t1);
-	// 		}
-	// 		else if (d >= t1) {
-	// 			// t0..t1 is totally in front of d, only go to front side
-	// 			return frontNode->traverse(ray, t0, t1);
-	// 		}
-	// 		else {
-	// 			// travese both children. front one first, back one last
-	// 			if (frontNode->traverse(ray, t0, d))
-	// 				return true;
-
-	// 			return backNode->traverse(ray, d, t1);
-	// 		}
-	// 	}
-	// }
 	bool traverse(Ray& ray, float t0, float t1){
 		unsigned char a = 0;
 		if (ray.dir[0] < 0){
@@ -119,12 +72,6 @@ public:
 		}
 		
 		float tx0, tx1, ty0, ty1, tz0, tz1;
-		// tx0 = ray.org[0] + t1 * ray.dir[0];
-		// tx1 = ray.org[0] + t1 * ray.dir[0];
-		// ty0 = ray.org[1] + t1 * ray.dir[1];
-		// ty1 = ray.org[1] + t1 * ray.dir[1];
-		// tz0 = ray.org[2] + t1 * ray.dir[2];
-		// tz1 = ray.org[2] + t1 * ray.dir[2];
 
 		tx0 = (m_min[0] - ray.org[0]) /ray.dir[0];
 		tx1 = (m_max[0] - ray.org[0]) /ray.dir[0];
@@ -132,13 +79,6 @@ public:
 		ty1 = (m_max[1] - ray.org[1]) /ray.dir[1];
 		tz0 = (m_min[2] - ray.org[2]) /ray.dir[2];
 		tz1 = (m_max[2] - ray.org[2]) /ray.dir[2];
-
-		// tx0 = fmin((ray.org[0] + t0 * ray.dir[0]), ((m_min[0] - ray.org[0]) /ray.dir[0]));
-		// tx1 = fmax((ray.org[0] + t1 * ray.dir[0]), ((m_max[0] - ray.org[0]) /ray.dir[0]));
-		// ty0 = fmin((ray.org[1] + t0 * ray.dir[1]), ((m_min[1] - ray.org[1]) /ray.dir[1]));
-		// ty1 = fmax((ray.org[1] + t1 * ray.dir[1]), ((m_max[1] - ray.org[1]) /ray.dir[1]));
-		// tz0 = fmin((ray.org[2] + t0 * ray.dir[2]), ((m_min[2] - ray.org[2]) /ray.dir[2]));
-		// tz1 = fmax((ray.org[2] + t1 * ray.dir[2]), ((m_max[2] - ray.org[2]) /ray.dir[2]));
 
 		if( fmax(fmax(tx0,ty0),tz0) < fmin(fmin(tx1,ty1),tz1) ){
     		return this->proc_subtree(a,tx0,ty0,tz0,tx1,ty1,tz1,ray,t0,t1);
