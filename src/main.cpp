@@ -22,10 +22,10 @@ Mat RenderFrame(void)
 	// Load scene description
 	scene.ParseOBJ("data/cow.obj");
 
-// #ifdef ENABLE_BSP
-// 	// Build BSPTree
-// 	scene.BuildAccelStructure();
-// #endif
+#ifdef ENABLE_BSP
+	// Build BSPTree
+	scene.BuildAccelStructure();
+#endif
 
 	Vec3f pointLightIntensity(3, 3, 3);
 	Vec3f lightPosition2(-3, 5, 4);

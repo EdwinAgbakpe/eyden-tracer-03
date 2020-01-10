@@ -19,6 +19,8 @@ BoundingBox.h
 /Users/edwinagbakpe/eyden-tracer-03/src/BoundingBox.h
 types.h
 /Users/edwinagbakpe/eyden-tracer-03/src/types.h
+ray.h
+/Users/edwinagbakpe/eyden-tracer-03/src/ray.h
 
 /Users/edwinagbakpe/eyden-tracer-03/src/CameraPerspective.h
 ICamera.h

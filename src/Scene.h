@@ -73,7 +73,7 @@ public:
 	bool Occluded(Ray& ray)
 	{
 #ifdef ENABLE_BSP
-		// return m_pBSPTree->Intersect(ray);
+		return m_pBSPTree->Intersect(ray);
 #else
 		for (auto pPrim : m_vpPrims)
 			if (pPrim->Occluded(ray)) return true;
@@ -102,7 +102,8 @@ public:
 	void BuildAccelStructure(void)
 	{
 		CBoundingBox box = CalcBounds();
-		std::cout << "Bounds are : " << box.m_min << " " << box.m_max << std::endl;
+		// std::cout << "Bounds are : " << box.m_min << " " << box.m_max << std::endl;
+		std::cout << "Bounds are : " << box.org << " " << box.m_side << std::endl;
 		m_pBSPTree = std::make_unique<BSPTree>(box, m_vpPrims);
 	}
 #endif
@@ -113,7 +114,8 @@ public:
 	 * @return The color of the shaded ray
 	 */
 	Vec3f RayTrace(Ray& ray) const
-	{
+	{	
+		// std::cout<<"Trace ";
 		return Intersect(ray) ? ray.hit->getShader()->Shade(ray) : m_bgColor;
 	}
 

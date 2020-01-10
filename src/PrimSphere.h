@@ -64,13 +64,10 @@ public:
 
 	virtual CBoundingBox calcBounds(void) const override
 	{
-		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
-		Vec3f min(m_center[0] - m_radius, m_center[1]- m_radius, m_center[2] - m_radius);
-		Vec3f max(m_center[0] + m_radius, m_center[1] + m_radius, m_center[2] + m_radius);
-		res.extend(min);
-		res.extend(max);
-		return res;
+		CBoundingBox box;
+		box.extend(m_center - Vec3f::all(m_radius));
+		box.extend(m_center + Vec3f::all(m_radius));
+		return box;
 	}
 	
 private:

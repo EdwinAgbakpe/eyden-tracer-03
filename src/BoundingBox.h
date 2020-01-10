@@ -1,8 +1,8 @@
 #pragma once
 
 #include "types.h"
+#include "ray.h"
 
-struct Ray;
 
 namespace {
 	inline Vec3f Min3f(const Vec3f a, const Vec3f b)
@@ -31,11 +31,10 @@ public:
 	 */
 	void clear(void)
 	{
-		// --- PUT YOUR CODE HERE ---
-		for (int i = 0; i < 3; i++){
-			m_min[i] = std::numeric_limits<float>::infinity();
-			m_max[i] = std::numeric_limits<float>::infinity();
-		}
+		// m_min = Vec3f::all(std::numeric_limits<float>::infinity());
+		// m_max = Vec3f::all(-std::numeric_limits<float>::infinity());
+		org = Vec3f::all(std::numeric_limits<float>::infinity());
+		m_side = 0;
 	}
 	
 	/**
@@ -44,9 +43,15 @@ public:
 	 */
 	void extend(Vec3f a)
 	{
-		// --- PUT YOUR CODE HERE ---
-		m_min = Min3f(m_min, a);
-		m_max = Max3f(m_max, a);
+		// m_min = Min3f(a, m_min);
+		// m_max = Max3f(a, m_max);
+		float temp;
+		if (org == Vec3f::all(std::numeric_limits<float>::infinity()))
+			org = a;
+		temp = fmax(abs(a[0] - org[0]), (m_side/2));
+		temp = fmax(abs(a[1] - org[1]), temp);
+		temp = fmax(abs(a[2] - org[2]), temp);
+		m_side = temp*2;
 	}
 	
 	/**
@@ -55,9 +60,10 @@ public:
 	 */
 	void extend(const CBoundingBox& box)
 	{
-		// --- PUT YOUR CODE HERE ---
-		extend(box.m_min);
-		extend(box.m_max);
+		// extend(box.m_min);
+		// extend(box.m_max);
+		extend(box.org + Vec3f((box.m_side/2), (box.m_side/2), (box.m_side/2)));
+		extend(box.org + Vec3f(-(box.m_side/2), -(box.m_side/2), -(box.m_side/2)));
 	}
 	
 	/**
@@ -66,13 +72,35 @@ public:
 	 */
 	bool overlaps(const CBoundingBox& box)
 	{
-		// --- PUT YOUR CODE HERE ---
-		return 
-		(m_min[0] <= box.m_max[0] && box.m_min[0] <= m_max[0]) &&
-		(m_min[1] <= box.m_max[1] && box.m_min[1] <= m_max[1]) &&
-		(m_min[2] <= box.m_max[2] && box.m_min[2] <= m_max[2]);
+		Vec3f tr1, tr2, bl1, bl2;
+		tr1 = org + Vec3f((m_side/2), (m_side/2), (m_side/2));
+		bl1 = org + Vec3f(-(m_side/2), -(m_side/2), -(m_side/2));
+		tr2 = box.org + Vec3f((box.m_side/2), (box.m_side/2), (box.m_side/2));
+		bl2 = box.org + Vec3f(-(box.m_side/2), -(box.m_side/2), -(box.m_side/2));
+
+		// std::cout<<tr2<<" "<<bl2<<std::endl;
+		for (int i = 0; i < 3; i++) {
+		if (!((bl1[i] < tr2[i]) && (tr1[i] > bl2[i]))){
+				// std::cout<<"False ";
+				return false;
+			}
+		}
+		// std::cout<<"True ";
+		return true;
+
+		// for (int i = 0; i < 3; i++) {
+		// 	if (!((bl1[i] < tr2[i]) && (tr1[i] > bl2[i]))){
+		// 		std::cout<<"False ";
+		// 		return false;
+		// 	}
+		// }
+		// std::cout<<"True ";
+		// return true;
+		
+		// return ((bl1[0] < tr2[0]) && (tr1[0] > bl2[0])) &&
+		// 	   ((bl1[1] < tr2[1]) && (tr1[1] > bl2[1])) &&
+		// 	   ((bl1[2] < tr2[2]) && (tr1[2] > bl2[2]));
 	}
-	
 	
 	/**
 	 * @brief Clips the ray with the bounding box
@@ -82,37 +110,51 @@ public:
 	 */
 	void clip(const Ray& ray, float& t0, float& t1)
 	{
-		// --- PUT YOUR CODE HERE ---
-		float nx = (m_min[0] - ray.org[0]) / ray.dir[0];
-		float ny = (m_min[1] - ray.org[1]) / ray.dir[1];
-		float nz = (m_min[2] - ray.org[2]) / ray.dir[2];
+		// std::cout<<"Clip ";
+		float d, den;
+		den = 1.0f / ray.dir.val[0];
 
-		float fx = (m_max[0] - ray.org[0]) / ray.dir[0];
-		float fy = (m_max[1] - ray.org[1]) / ray.dir[1];
-		float fz = (m_max[2] - ray.org[2]) / ray.dir[2];
+		Vec3f tr, bl;
+		tr = org + Vec3f((m_side/2), (m_side/2), (m_side/2));
+		bl = org + Vec3f(-(m_side/2), -(m_side/2), -(m_side/2));
 
-		if (ray.dir[0] < 0){
-			std::swap(nx, fx);
+		if (ray.dir.val[0] > 0) {
+			if ((d = (bl[0] - ray.org.val[0]) * den) > t0) t0 = d;
+			if ((d = (tr[0] - ray.org.val[0]) * den) < t1) t1 = d;
 		}
-		if (ray.dir[1] < 0){
-			std::swap(ny, fy);
+		else {
+			if ((d = (tr[0] - ray.org.val[0]) * den) > t0) t0 = d;
+			if ((d = (bl[0] - ray.org.val[0]) * den) < t1) t1 = d;
 		}
-		if (ray.dir[2] < 0){
-			std::swap(nz, fz);
+		if (t0 > t1) return;
+
+		den = 1.0f / ray.dir.val[1];
+		if (ray.dir.val[1] > 0) {
+			if ((d = (bl[1] - ray.org.val[1]) * den) > t0) t0 = d;
+			if ((d = (tr[1] - ray.org.val[1]) * den) < t1) t1 = d;
 		}
+		else {
+			if ((d = (tr[1] - ray.org.val[1]) * den) > t0) t0 = d;
+			if ((d = (bl[1] - ray.org.val[1]) * den) < t1) t1 = d;
+		}
+		if (t0 > t1) return;
 
-		float n_max = MAX(MAX(nx, ny), nz);
-		float f_min = MIN(MIN(fx, fy), fz);
-
-		if (n_max < f_min) {
-			t0 = n_max;
-			t1 = f_min;
+		den = 1.0f / ray.dir.val[2];
+		if (ray.dir.val[2] > 0) {
+			if ((d = (bl[2] - ray.org.val[2]) * den) > t0) t0 = d;
+			if ((d = (tr[2] - ray.org.val[2]) * den) < t1) t1 = d;
+		}
+		else {
+			if ((d = (tr[2] - ray.org.val[2]) * den) > t0) t0 = d;
+			if ((d = (bl[2] - ray.org.val[2]) * den) < t1) t1 = d;
 		}
 		return;
 	}
 	
 	
 public:
-	Vec3f m_min;	///< The minimal point defying the size of the bounding box
-	Vec3f m_max;	///< The maximal point defying the size of the bounding box
+	// Vec3f m_min = Vec3f::all(std::numeric_limits<float>::infinity());	///< The minimal point defying the size of the bounding box
+	// Vec3f m_max = Vec3f::all(-std::numeric_limits<float>::infinity());	///< The maximal point defying the size of the bounding box
+	Vec3f org = Vec3f::all(std::numeric_limits<float>::infinity());
+	float m_side = 0;
 };

@@ -37,10 +37,24 @@ public:
 	{
 		CBoundingBox bounds;
 		// --- PUT YOUR CODE HERE ---
-		Vec3f p_inf(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
-		Vec3f n_inf(-std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity());
-		bounds.extend(p_inf);
-		bounds.extend(n_inf);
+		float Infinity = std::numeric_limits<float>::infinity();
+
+		if (m_normal.val[0] == 0) {
+			bounds.extend(Vec3f(m_origin.val[0], -Infinity, -Infinity));
+			bounds.extend(Vec3f(m_origin.val[0], Infinity, Infinity));
+		}
+		else if (m_normal.val[1] == 0) {
+			bounds.extend(Vec3f(-Infinity, m_origin.val[1], -Infinity));
+			bounds.extend(Vec3f(Infinity,  m_origin.val[1], Infinity));
+		}
+		else if (m_normal.val[2] == 0) {
+			bounds.extend(Vec3f(-Infinity, -Infinity, m_origin.val[2]));
+			bounds.extend(Vec3f(Infinity,   Infinity, m_origin.val[2]));
+		}
+		else {
+			bounds.extend(Vec3f(-Infinity, -Infinity, -Infinity));
+			bounds.extend(Vec3f(Infinity, Infinity, Infinity));
+		}
 		return bounds;
 	}
 	
